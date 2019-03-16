@@ -19,7 +19,7 @@ public abstract class ComponentTestHarness {
 
     @ClassRule
     public static DockerComposeContainer environment =
-            new DockerComposeContainer(new File("docker-compose.yml"))
+            new DockerComposeContainer(new File("component-test.yml"))
                     .withLogConsumer(SERVICE_CONTAINER, new Slf4jLogConsumer(log).withPrefix(SERVICE_CONTAINER))
                     .withExposedService(SERVICE_CONTAINER, SERVICE_PORT,
                             Wait.forListeningPort())
