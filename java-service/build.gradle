@@ -37,9 +37,7 @@ task componentTest(type: Test) {
 	classpath = sourceSets.componentTest.runtimeClasspath
 }
 
-componentTest.dependsOn test
-check.dependsOn componentTest
-jar.dependsOn check
+componentTest.dependsOn jar
 
 dependencyManagement {
     imports {
@@ -51,10 +49,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    testImplementation "junit:junit:4.12"
-    testImplementation "org.assertj:assertj-core:3.12.1"
-    testImplementation "io.rest-assured:spring-mock-mvc:3.3.0"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.12.1'
+    testImplementation 'io.rest-assured:spring-mock-mvc:3.3.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     componentTestImplementation configurations.implementation
     componentTestImplementation 'junit:junit:4.12'
