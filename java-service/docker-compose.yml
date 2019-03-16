@@ -10,16 +10,19 @@ services:
       - 8081:8081
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.8.0
     ports:
       - 9090:9090
     volumes:
-      - prometheus-configuration:/etc/prometheus/
+      - ./infrastructure/prometheus/:/etc/prometheus/
 
-  configuration:
-    build: infrastructure
+  grafana:
+    image: grafana/grafana:6.0.1
+    ports:
+      - 3000:3000
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: foobar
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
-      - prometheus-configuration:/etc/prometheus/
+      - ./infrastructure/grafana/:/etc/grafana/provisioning/
 
-volumes:
-  prometheus-configuration:
