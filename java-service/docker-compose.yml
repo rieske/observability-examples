@@ -21,8 +21,10 @@ services:
     ports:
       - 3000:3000
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: foobar
-      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ORG_ROLE: "Editor"
     volumes:
-      - ./infrastructure/grafana/:/etc/grafana/provisioning/
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning/
+      - ./infrastructure/grafana/dashboards:/var/lib/grafana/dashboards/
 
