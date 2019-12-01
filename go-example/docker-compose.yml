@@ -28,3 +28,4 @@ services:
       - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning/
       - ./infrastructure/grafana/dashboards:/var/lib/grafana/dashboards/
     mem_limit: 64M
+
