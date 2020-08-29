@@ -1,14 +1,13 @@
 package lt.rieske.demo;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 public class SmokeTest extends ComponentTestHarness {
 
     @Test
-    public void serviceStarts() {
+    void serviceStarts() {
         // @formatter:off
         given()
             .baseUri(adminUrl())
@@ -20,7 +19,7 @@ public class SmokeTest extends ComponentTestHarness {
     }
 
     @Test
-    public void prometheusMetricsEndpointIsExposed() {
+    void prometheusMetricsEndpointIsExposed() {
         // @formatter:off
         given()
             .baseUri(adminUrl())
