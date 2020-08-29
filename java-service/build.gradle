@@ -1,48 +1,58 @@
 plugins {
-    id 'java'
-    id 'application'
-    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id "java"
+    id "org.springframework.boot" version "2.3.3.RELEASE"
 }
 
-sourceCompatibility = 11
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
     mavenCentral()
 }
 
-sourceSets {
-	componentTest {
-		java.srcDir file('src/component-test/java')
-		resources.srcDir file('src/component-test/resources')
-	}
+def componentTest = sourceSets.create("componentTest")
+
+configurations[componentTest.implementationConfigurationName].extendsFrom(configurations.testImplementation)
+configurations[componentTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly)
+
+def componentTestTask = tasks.register("componentTest", Test) {
+    it.dependsOn(tasks.named("assemble"))
+
+	it.testClassesDirs = sourceSets.componentTest.output.classesDirs
+	it.classpath = sourceSets.componentTest.runtimeClasspath
+
+    it.inputs.files(jar.archiveFile, file("Dockerfile")).withPathSensitivity(PathSensitivity.RELATIVE)
+}
+tasks.named("check") {
+    it.dependsOn(componentTestTask)
 }
 
-task componentTest(type: Test) {
-	testClassesDirs = sourceSets.componentTest.output.classesDirs
-	classpath = sourceSets.componentTest.runtimeClasspath
+configurations {
+    implementation {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+    }
 }
-
-componentTest.dependsOn jar
-check.dependsOn componentTest
 
 dependencies {
     implementation(platform("org.springframework.boot:spring-boot-dependencies:2.3.3.RELEASE"))
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation("io.micrometer:micrometer-registry-prometheus")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
-    testImplementation 'org.assertj:assertj-core:3.12.1'
+    testImplementation("org.assertj:assertj-core:3.12.1")
 
     componentTestImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
-    componentTestImplementation 'org.assertj:assertj-core:3.12.1'
-    componentTestImplementation 'org.testcontainers:testcontainers:1.14.3'
-    componentTestImplementation 'io.rest-assured:rest-assured:4.1.2'
+    componentTestImplementation("org.assertj:assertj-core:3.12.1")
+    componentTestImplementation("org.testcontainers:testcontainers:1.14.3")
+    componentTestImplementation("io.rest-assured:rest-assured:4.1.2")
 }
-
-mainClassName = 'lt.rieske.demo.Application'
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()

@@ -20,7 +20,7 @@ public abstract class ComponentTestHarness {
     private static final int ADMIN_PORT = 8081;
 
     private static final DockerComposeContainer<?> environment =
-            new DockerComposeContainer<>(new File("./component-test.yml"))
+            new DockerComposeContainer<>(new File("src/componentTest/resources/component-test.yml"))
                     .withLocalCompose(true)
                     .withLogConsumer(SERVICE_CONTAINER, new Slf4jLogConsumer(log).withPrefix(SERVICE_CONTAINER))
                     .withExposedService(SERVICE_CONTAINER, 1,SERVICE_PORT, Wait.forListeningPort())
